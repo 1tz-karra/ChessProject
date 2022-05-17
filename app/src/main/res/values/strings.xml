@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Chess porject</string>
+    <string name="scan_game">Сканировать доску</string>
+    <string name="prev_game">Посмотреть партии</string>
+    <string name="scan">Сделать фотографию</string>
+    <string name="game1">Игра 1</string>
+    <string name="game2">Игра 2</string>
+    <string name="game3">Игра 3</string>
+    <string name="game4">Игра 4</string>
+    <string name="game5">Игра 5</string>
+    <string name="start">Поехали</string>
+</resources>
