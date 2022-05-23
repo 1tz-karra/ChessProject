@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/img"
     tools:context=".MainActivity">
 
     <Button
@@ -13,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="30dp"
         android:layout_marginTop="450dp"
-        android:backgroundTint="@color/purple_700"
+        android:backgroundTint="@color/crimson"
         android:text="@string/scan_game"
         android:textAlignment="center"
         android:textColor="@color/white"
@@ -24,23 +23,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/scan_game"
-        android:layout_marginHorizontal="10dp"
+        android:layout_marginHorizontal="30dp"
         android:layout_marginTop="20dp"
-        android:backgroundTint="#6A2424"
+        android:backgroundTint="@color/green"
         android:text="@string/prev_game"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="30sp" />
 
-    <EditText
-        android:id="@+id/editTextTextPersonName"
+    <ImageView
+        android:id="@+id/imageView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="100"
-        android:inputType="textPersonName"
-        android:textAlignment="center"
-        android:textColor="@color/teal_700"
-        android:text="Name" />
+        app:srcCompat="@drawable/img_1" />
 
 
 </RelativeLayout>

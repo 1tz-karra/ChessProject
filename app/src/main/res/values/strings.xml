@@ -9,4 +9,6 @@
     <string name="game4">Игра 4</string>
     <string name="game5">Игра 5</string>
     <string name="start">Поехали</string>
+    <string name="start_game">Начало партии</string>
+    <string name="game_2"></string>
 </resources>

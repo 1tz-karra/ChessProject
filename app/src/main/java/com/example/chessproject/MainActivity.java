@@ -1,18 +1,15 @@
 package com.example.chessproject;
 
 import androidx.appcompat.app.AppCompatActivity;
-import android.app.Activity;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements OnClickListener {
 
@@ -23,18 +20,22 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
     Button Scan_Button;
     Button Prev_Button;
-    EditText text;
+    EditText etText;
 
     SharedPreferences sPref;
-    EditText etText;
+
     final String SAVED_TEXT = "saved_text";
 
-    String key = "key";
+    int num = 0;
     String[] base = new String[5];
 
     private void update(String s) {
-        for (int i = 0; i < 5; ++i) {
-            base[i] = base[i + 1];
+        String prev = "";
+        String next = base[0];
+        for (int i = 1; i < 5; ++i) {
+            prev = base[i];
+            base[i] = next;
+            next = prev;
         }
         base[0] = s;
     }
@@ -67,38 +68,44 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         Prev_Button = (Button) findViewById(R.id.prev_game);
         Prev_Button.setOnClickListener(this);
         //connect();
-        text = (EditText) findViewById(R.id.editTextTextPersonName);
+        //etText = (EditText) findViewById(R.id.editTextTextPersonName);
         //text.setText(base[0]);
+        //loadText();
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-
-        outState.putStringArray(key, base);
-        super.onSaveInstanceState(outState);
+    private void saveText() {
+        sPref = getSharedPreferences("MyPref", MODE_PRIVATE);
+        SharedPreferences.Editor ed = sPref.edit();
+        ed.putInt("size", 5);
+        for(int i = 0; i < 5; i++)
+            ed.putString("" + i, base[i]);
+        ed.apply();
     }
 
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-
-        base = savedInstanceState.getStringArray(key);
-
-
+    private void loadText() {
+        sPref = getSharedPreferences("MyPref", MODE_PRIVATE);
+        int size = sPref.getInt("size", 0);
+        for(int i = 0; i < 5; i++)
+            base[i] = sPref.getString("" + i, null);
     }
+
+    /*@Override
+    protected void onDestroy() {
+        super.onDestroy();
+        saveText();
+    }*/
 
     @Override
     public void onClick(View v) {
-        base[0] = text.getText().toString();
         if (v.getId() == R.id.scan_game) {
-            Intent intent = new Intent(this, ActivityTwo.class);
+            //update(etText.getText().toString());
+            Intent intent = new Intent(this, ScanActivity.class);
             startActivity(intent);
-            base[1] = base[0];
-            base[0] = "poshel nahui";
         }
         if (v.getId() == R.id.prev_game) {
-            text.setText(base[1]);
-            Intent intent = new Intent(this, ActivityThree.class);
+            //etText.setText(base[num]);
+            ++num;
+            Intent intent = new Intent(this, PrevActivity.class);
             startActivity(intent);
         }
     }

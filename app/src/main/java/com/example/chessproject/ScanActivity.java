@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
-public class ActivityTwo extends AppCompatActivity {
+public class ScanActivity extends AppCompatActivity {
 
     ImageView imageView;
     Button scan;

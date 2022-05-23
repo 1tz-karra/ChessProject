@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 
-public class ActivityThree extends AppCompatActivity implements View.OnClickListener {
+public class PrevActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button game1;
     Button game2;
@@ -37,9 +37,11 @@ public class ActivityThree extends AppCompatActivity implements View.OnClickList
         Intent intent = new Intent(this, ChessBoardActivity.class);
         if (v.getId() == R.id.button1) {
             intent.putExtra("game", "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+            intent.putExtra("game_info", "Начало партии");
         }
         if (v.getId() == R.id.button2) {
-            intent.putExtra("game", "2r2rk1/2q2p1p/p1p1nPpQ/3p4/4p1B1/8/PPP3PP/R4R1K");
+            intent.putExtra("game", "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPPP/RNBQKBNR");
+            intent.putExtra("game_info", "Принятый ферзевый гамбит");
         }
         /*if (v.getId() == R.id.button3) {
             intent.putExtra("game", );

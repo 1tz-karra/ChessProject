@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/teal_700"
+    android:background="@color/white"
     tools:context=".MainActivity">
 
 
@@ -13,14 +13,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="80dp"
-        android:layout_marginTop="550dp"
-        android:text="@string/scan" />
+        android:layout_marginTop="509dp"
+        android:text="@string/scan"
+        android:backgroundTint="@color/crimson"/>
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/chess_board" />
-
+        app:srcCompat="@drawable/img_2"
+        android:layout_marginTop="150dp"/>
 
 </RelativeLayout>

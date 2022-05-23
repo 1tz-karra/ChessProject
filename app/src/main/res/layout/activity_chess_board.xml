@@ -4,11 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ChessBoardActivity">
+    tools:context=".ChessBoardActivity"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="33dp"
+        android:layout_marginTop="0dp"
+        android:text="@string/start_game" />
 
     <com.example.chessproject.ChessView
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:id="@+id/chessView"/>
+
+
 
 </LinearLayout>
