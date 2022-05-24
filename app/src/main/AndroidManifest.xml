@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ChessProject">
         <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+        <activity
             android:name=".ChessBoardActivity"
             android:exported="false" />
         <activity
@@ -21,7 +24,7 @@
             android:name=".ScanActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".LogActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
