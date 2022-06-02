@@ -16,11 +16,15 @@ import android.widget.ImageView;
 
 import java.io.*;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 public class ScanActivity extends AppCompatActivity {
 
     ImageView imageView;
     Button scan;
+
+    private String email;
+    private String password;
 
     private  String     HOST      = "192.168.1.5";
     private  int        PORT      = 15000;
@@ -32,29 +36,29 @@ public class ScanActivity extends AppCompatActivity {
         imageView = findViewById(R.id.imageView);
         scan = findViewById(R.id.scan);
         scan.setOnClickListener(this::onClick);
+        Intent intent = getIntent();
+        email = intent.getStringExtra("email");
+        password = intent.getStringExtra("password");
     }
 
     public void onClick(View v) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        System.out.println("testing 1");
         startActivityForResult(intent, 0);
-        System.out.println("testing 2");
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent data) {
-        System.out.println("testing 3");
         super.onActivityResult(requestCode, resultCode, data);
         Bitmap bitmap = (Bitmap) data.getExtras().get("data");
         new Send_photo().execute(bitmap);
     }
 
-    class Send_photo extends AsyncTask<Bitmap,Void,String> {
+    class Send_photo extends AsyncTask<Bitmap,Void,Void> {
         Socket socket;
         BufferedOutputStream writer;
         BufferedReader reader;
-        protected String doInBackground(Bitmap...params){
+        protected Void doInBackground(Bitmap...params){
             String FEN = "";
             try {
                 socket = new Socket(HOST, PORT);
@@ -65,19 +69,27 @@ public class ScanActivity extends AppCompatActivity {
                                 socket.getInputStream()));
                 System.out.println("Connected to server");
                 byte [] imgbyte = getBytesFromBitmap(params[0]);
+                String credentials = "";
+                credentials += email;
+                credentials += "|";
+                credentials += password;
+                while (credentials.length() < 40) {
+                    credentials += " ";
+                }
                 writer.write(2);
+                writer.flush();
+                writer.write(credentials.getBytes(StandardCharsets.UTF_8));
                 writer.flush();
                 writer.write(imgbyte);
                 writer.flush();
                 System.out.println("File sent");
-                FEN = reader.readLine();
                 socket.close();
             } catch (IOException e) {
                 System.out.println("Connection failed");
                 e.printStackTrace();
             }
             System.out.println(FEN);
-            return FEN;
+            return null;
         }
     }
 

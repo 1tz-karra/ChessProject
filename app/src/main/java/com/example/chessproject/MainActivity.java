@@ -27,15 +27,14 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         Intent intent = getIntent();
         email = intent.getStringExtra("email");
         password = intent.getStringExtra("password");
-        System.out.println("Main Activity(On Click)");
-        System.out.println(email);
-        System.out.println(password);
     }
 
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.scan_game) {
             Intent intent = new Intent(this, ScanActivity.class);
+            intent.putExtra("email", email);
+            intent.putExtra("password", password);
             startActivity(intent);
         }
         if (v.getId() == R.id.prev_game) {

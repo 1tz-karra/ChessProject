@@ -1,0 +1,4 @@
+login,password,game1,game1_name,game2,game2_name,game3,game3_name,game4,game4_name,game5,game5_name
+user1,pass1,rnbqk2r/pp3pbp/3p1np1/2pPP3/5P2/2N5/PP4PP/R1BQKBNR,Benoni: Mikenas variation,rnbq1rk1/ppp2pbp/3p1np1/3Pp3/2P1P3/2N1BP2/PP4PP/R2QKBNR,"King's Indian: Saemisch, orthodox, 7.d5",r1bqk2r/ppp2ppp/2n1pn2/3p4/2PP4/P1Q5/1P2PPPP/R1B1KBNR,"Nimzo-Indian: classical, Botvinnik variation",,,,
+user2,pass2,,,,,,,,,,
+user3,pass3,,,,,,,,,,

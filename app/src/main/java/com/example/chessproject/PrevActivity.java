@@ -48,99 +48,102 @@ public class PrevActivity extends AppCompatActivity implements View.OnClickListe
         game4.setOnClickListener(this);
         game5 = (Button) findViewById(R.id.button5);
         game5.setOnClickListener(this);
-//        Intent intent = getIntent();
-//        email = intent.getStringExtra("email");
-//        password = intent.getStringExtra("password");
     }
 
     @Override
     public void onClick(View v) {
         Intent intent = new Intent(this, ChessBoardActivity.class);
-//        ArrayList<String> credentials = new ArrayList<String>();
-//        credentials.add(email);
-//        credentials.add(password);
-//        String data = "";
+        String data = "";
         if (v.getId() == R.id.button1) {
-//            credentials.add("1");
-//            try {
-//                data = new Get_game().execute(credentials).get();
-//            } catch (ExecutionException | InterruptedException e) {
-//                e.printStackTrace();
-//            }
-            intent.putExtra("game", "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
-            intent.putExtra("game_info", "Начало партии");
+            try {
+                data = new Get_game().execute(1).get();
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+            }
+            String[] words = data.split(",");
+            intent.putExtra("game", words[0]);
+            intent.putExtra("game_info", words[1]);
         }
         if (v.getId() == R.id.button2) {
-//            credentials.add("2");
-//            try {
-//                data = new Get_game().execute(credentials).get();
-//            } catch (ExecutionException | InterruptedException e) {
-//                e.printStackTrace();
-//            }
-            intent.putExtra("game", "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPPP/RNBQKBNR");
-            intent.putExtra("game_info", "Принятый ферзевый гамбит");
+            try {
+                data = new Get_game().execute(2).get();
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+            }
+            String[] words = data.split(",");
+            intent.putExtra("game", words[0]);
+            intent.putExtra("game_info", words[1]);
         }
-//        if (v.getId() == R.id.button3) {
-//            credentials.add("3");
-//            try {
-//                data = new Get_game().execute(credentials).get();
-//            } catch (ExecutionException | InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//            intent.putExtra("game", );
-//        }
-//        if (v.getId() == R.id.button4) {
-//            credentials.add("4");
-//            try {
-//                data = new Get_game().execute(credentials).get();
-//            } catch (ExecutionException | InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//            intent.putExtra("game", );
-//        }
-//        if (v.getId() == R.id.button5) {
-//            credentials.add("5");
-//            try {
-//                data = new Get_game().execute(credentials).get();
-//            } catch (ExecutionException | InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//            intent.putExtra("game", );
-//        }
-//        startActivity(intent);
+        if (v.getId() == R.id.button3) {
+            try {
+                data = new Get_game().execute(3).get();
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+            }
+            String[] words = data.split(",");
+            intent.putExtra("game", words[0]);
+            intent.putExtra("game_info", words[1]);
+        }
+        if (v.getId() == R.id.button4) {
+            try {
+                data = new Get_game().execute(4).get();
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+            }
+            String[] words = data.split(",");
+            intent.putExtra("game", words[0]);
+            intent.putExtra("game_info", words[1]);
+        }
+        if (v.getId() == R.id.button5) {
+            try {
+                data = new Get_game().execute(5).get();
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+            }
+            String[] words = data.split(",");
+            intent.putExtra("game", words[0]);
+            intent.putExtra("game_info", words[1]);
+        }
+        startActivity(intent);
     }
 
-//    class Get_game extends AsyncTask<ArrayList<String>,Void,String> {
-//        Socket socket;
-//        BufferedWriter writer;
-//        BufferedReader reader;
-//        protected String doInBackground(ArrayList<String>...params){
-//            String FEN = "";
-//            try {
-//                socket = new Socket(HOST, PORT);
-//                writer = new BufferedWriter(
-//                        new OutputStreamWriter(
-//                                socket.getOutputStream()));
-//                reader = new BufferedReader(
-//                        new InputStreamReader(
-//                                socket.getInputStream()));
-//                System.out.println("Connected to server");
-//                ArrayList<String> credentials = params[0];
-//                writer.write(3);
-//                writer.flush();
-//                writer.write(credentials.get(0));
-//                writer.write("|");
-//                writer.write(credentials.get(1));
-//                writer.write("|");
-//                writer.write(credentials.get(2));
-//                writer.flush();
-//                socket.close();
-//            } catch (IOException e) {
-//                System.out.println("Connection failed");
-//                e.printStackTrace();
-//            }
-//            System.out.println(FEN);
-//            return FEN;
-//        }
-//    }
+    class Get_game extends AsyncTask<Integer,Void,String> {
+        Socket socket;
+        BufferedWriter writer;
+        BufferedReader reader;
+        protected String doInBackground(Integer...params){
+            String data = "";
+            try {
+                socket = new Socket(HOST, PORT);
+                writer = new BufferedWriter(
+                        new OutputStreamWriter(
+                                socket.getOutputStream()));
+                reader = new BufferedReader(
+                        new InputStreamReader(
+                                socket.getInputStream()));
+                System.out.println("Connected to server");
+                int button_no = params[0];
+                writer.write(3);
+                writer.flush();
+                writer.write(button_no);
+                writer.flush();
+                String credentials = "";
+                credentials += email;
+                credentials += "|";
+                credentials += password;
+                while (credentials.length() < 40) {
+                    credentials += " ";
+                }
+                writer.write(credentials);
+                writer.flush();
+                data = reader.readLine();
+                System.out.println(data);
+                socket.close();
+            } catch (IOException e) {
+                System.out.println("Connection failed");
+                e.printStackTrace();
+            }
+            return data;
+        }
+    }
 }
