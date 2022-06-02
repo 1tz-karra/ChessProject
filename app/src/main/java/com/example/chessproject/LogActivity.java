@@ -5,22 +5,33 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 
-import com.rengwuxian.materialedittext.MaterialEditText;
-
-import org.w3c.dom.Text;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 public class LogActivity extends AppCompatActivity {
 
     Button log;
     Button reg;
+
+    TextView email;
+    TextView password;
+
+    private  String     HOST      = "192.168.1.5";
+    private  int        PORT      = 15000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +63,8 @@ public class LogActivity extends AppCompatActivity {
         LayoutInflater inflater = LayoutInflater.from(this);
         View register_window = inflater.inflate(R.layout.register_window, null);
         dialog.setView(register_window);
-        TextView email = register_window.findViewById(R.id.email);
-        TextView password = register_window.findViewById(R.id.password);
+        email = register_window.findViewById(R.id.email);
+        password = register_window.findViewById(R.id.password);
 
         dialog.setNegativeButton("Отменить", new DialogInterface.OnClickListener() {
             @Override
@@ -61,21 +72,62 @@ public class LogActivity extends AppCompatActivity {
                 dialogInterface.dismiss();
             }
         });
+
         dialog.setPositiveButton("Войти", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int which) {
-                //check email + password in server
-                //email.toString() return email;
-                //if user not found use showBack instead start()
-                /*if (1 == 1) {
+                String semail = email.getText().toString();
+                String spassword = password.getText().toString();
+                ArrayList<String> credentials = new ArrayList<String>();
+                credentials.add(semail);
+                credentials.add(spassword);
+                String ret = "";
+                try {
+                    ret = new Send_credetials_in().execute(credentials).get();
+                } catch (ExecutionException | InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(ret);
+                if (ret.equals("1")) {
                     start();
                 } else {
                     showBack();
-                }*/
-                start();
+                }
             }
         });
         dialog.show();
+    }
+
+    class Send_credetials_in extends AsyncTask<ArrayList<String>,Void,String> {
+        Socket socket;
+        BufferedWriter writer;
+        BufferedReader reader;
+        protected String doInBackground(ArrayList<String>...params){
+            String ret = "";
+            try {
+                socket = new Socket(HOST, PORT);
+                writer = new BufferedWriter(
+                         new OutputStreamWriter(
+                         socket.getOutputStream()));
+                reader = new BufferedReader(
+                         new InputStreamReader(
+                         socket.getInputStream()));
+                System.out.println("Connected to server");
+                ArrayList<String> credentials = params[0];
+                writer.write(1);
+                writer.flush();
+                writer.write(credentials.get(0));
+                writer.write("|");
+                writer.write(credentials.get(1));
+                writer.flush();
+                ret = reader.readLine();
+                socket.close();
+            } catch (IOException e) {
+                System.out.println("Connection failed");
+                e.printStackTrace();
+            }
+            return ret;
+        }
     }
 
     private void showBack() {
@@ -86,10 +138,34 @@ public class LogActivity extends AppCompatActivity {
         LayoutInflater inflater = LayoutInflater.from(this);
         View register_window = inflater.inflate(R.layout.register_window, null);
         dialog.setView(register_window);
+        email = register_window.findViewById(R.id.email);
+        password = register_window.findViewById(R.id.password);
         dialog.setNegativeButton("Отменить", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int which) {
                 dialogInterface.dismiss();
+            }
+        });
+        dialog.setPositiveButton("Войти", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+                String semail = email.getText().toString();
+                String spassword = password.getText().toString();
+                ArrayList<String> credentials = new ArrayList<String>();
+                credentials.add(semail);
+                credentials.add(spassword);
+                String ret = "";
+                try {
+                    ret = new Send_credetials_in().execute(credentials).get();
+                } catch (ExecutionException | InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(ret);
+                if (ret.equals("1")) {
+                    start();
+                } else {
+                    showBack();
+                }
             }
         });
         dialog.show();
@@ -116,14 +192,60 @@ public class LogActivity extends AppCompatActivity {
         dialog.setPositiveButton("Зарегистрироваться", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int which) {
+                String semail = email.getText().toString();
+                String spassword = password.getText().toString();
+                ArrayList<String> credentials = new ArrayList<String>();
+                credentials.add(semail);
+                credentials.add(spassword);
+                try {
+                    new Send_credetials_up().execute(credentials).get();
+                } catch (ExecutionException | InterruptedException e) {
+                    e.printStackTrace();
+                }
                 start();
             }
         });
         dialog.show();
     }
 
+    class Send_credetials_up extends AsyncTask<ArrayList<String>,Void,Void> {
+        Socket socket;
+        BufferedWriter writer;
+        BufferedReader reader;
+
+        protected Void doInBackground(ArrayList<String>... params) {
+            try {
+                socket = new Socket(HOST, PORT);
+                writer = new BufferedWriter(
+                        new OutputStreamWriter(
+                                socket.getOutputStream()));
+                reader = new BufferedReader(
+                        new InputStreamReader(
+                                socket.getInputStream()));
+                System.out.println("Connected to server");
+                ArrayList<String> credentials = params[0];
+                writer.write(0);
+                writer.flush();
+                writer.write(credentials.get(0));
+                writer.write("|");
+                writer.write(credentials.get(1));
+                writer.flush();
+                socket.close();
+            } catch (IOException e) {
+                System.out.println("Connection failed");
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+
     private void start() {
         Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("email", email.getText().toString());
+        intent.putExtra("password", password.getText().toString());
+        System.out.println("Log");
+        System.out.println(email.getText());
+        System.out.println(password.getText());
         startActivity(intent);
     }
 }

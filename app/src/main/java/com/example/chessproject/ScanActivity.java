@@ -22,7 +22,7 @@ public class ScanActivity extends AppCompatActivity {
     ImageView imageView;
     Button scan;
 
-    private  String     HOST      = "";
+    private  String     HOST      = "192.168.1.5";
     private  int        PORT      = 15000;
 
     @Override
@@ -36,12 +36,15 @@ public class ScanActivity extends AppCompatActivity {
 
     public void onClick(View v) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        System.out.println("testing 1");
         startActivityForResult(intent, 0);
+        System.out.println("testing 2");
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent data) {
+        System.out.println("testing 3");
         super.onActivityResult(requestCode, resultCode, data);
         Bitmap bitmap = (Bitmap) data.getExtras().get("data");
         new Send_photo().execute(bitmap);
@@ -62,6 +65,8 @@ public class ScanActivity extends AppCompatActivity {
                                 socket.getInputStream()));
                 System.out.println("Connected to server");
                 byte [] imgbyte = getBytesFromBitmap(params[0]);
+                writer.write(2);
+                writer.flush();
                 writer.write(imgbyte);
                 writer.flush();
                 System.out.println("File sent");
@@ -74,18 +79,6 @@ public class ScanActivity extends AppCompatActivity {
             System.out.println(FEN);
             return FEN;
         }
-    }
-
-    // функция для улучшения качества изображения, пока непонятно, как использовать
-    public static Bitmap getBitmapFromResources(Resources resources, int resImage) {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = false;
-        options.inDither = false;
-        options.inSampleSize = 1;
-        options.inScaled = false;
-        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-
-        return BitmapFactory.decodeResource(resources, resImage, options);
     }
 
     public byte[] getBytesFromBitmap(Bitmap bitmap) {
