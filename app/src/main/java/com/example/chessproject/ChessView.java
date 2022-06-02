@@ -2,7 +2,6 @@ package com.example.chessproject;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -121,7 +120,7 @@ public class ChessView extends View {
                         col += (piecesData.charAt(i) -'1');
                     }
                     break;
-            };
+            }
             ++col;
         }
     }
